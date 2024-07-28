@@ -1,0 +1,9 @@
+{
+    "login":"http://localhost:8000/user/login",
+    "signup":"http://localhost:8000/user/signup",
+    "gettasklist":"http://localhost:8000/task/gettasklist",
+    "addtask":"http://localhost:8000/task/addtask",
+    "deletetask":"http://localhost:8000/task/deletetask",
+    "edittask":"http://localhost:8000/task/edittask",
+    "updatetaskstatus":"http://localhost:8000/task/updatetaskstatus"
+}
