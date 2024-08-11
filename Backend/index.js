@@ -8,6 +8,7 @@ const mysqlconnection=require('./models/db.js');
 const userRoute=require('./Routes/User.js');
 const authRoute=require('./Middleware/authMiddleware.js');
 const taskRoute=require('./Routes/TaskList.js');
+const port=8000;
 
 app.use(bodyparser.json());
 app.use(cors())
@@ -29,6 +30,6 @@ mysqlconnection.connect((err)=>{
     }
 })
 
-app.listen(Number(process.env.PORT),()=>{
-    console.log(`server started on http://localhost:${Number(process.env.PORT)}`)
+app.listen(port,()=>{
+    console.log(`server started on http://localhost:${port}`)
 })
