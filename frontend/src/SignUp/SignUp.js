@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {useFormik, validateYupSchema} from 'formik';
 import './SignUp.css';
 import * as yup from 'yup';
@@ -8,6 +8,7 @@ import config from '../config.json';
 import BackdropComp from '../Common/Backdrop';
 import SnackbarComp from '../Common/Snackbar';
 import { useNavigate } from 'react-router-dom';
+import signupimage from './Signup.jpg';
 
 const ValidationSchema=yup.object({
     name:yup.string().required('Name is required'),
@@ -32,7 +33,7 @@ const SignUp=()=>{
             resetForm();
         }
     })
-
+    
     const [openbackdrop,setBackdrop]=useState(false);
     const [opensnackbar,setSnackbar]=useState({open:false,message:''});
     const navigate=useNavigate();
@@ -66,8 +67,9 @@ const SignUp=()=>{
     }
 
 return(
+<div className='signup-container'>
 <div className="form-box">
-<form className="form" onSubmit={signupform.handleSubmit}>
+<form className="signup-form" onSubmit={signupform.handleSubmit}>
     <span className="title">Sign up</span>
     <span className="subtitle">Create a free account with your email.</span>
     <div className="form-container">
@@ -89,6 +91,10 @@ vertical='top' horizontal='right'
 opensnackbar={opensnackbar.open}
  message={opensnackbar.message}
  />
+</div>
+  <div className='image-container'>
+    <img src={signupimage} />
+  </div>
 </div>
 )
 }

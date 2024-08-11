@@ -49,7 +49,13 @@ const Login=()=>{
            setBackdrop(false);       
     }
 return(
-    <div>
+  <body className="body-container">
+  <div>
+     <div className="wave"></div>
+     <div className="wave"></div>
+     <div className="wave"></div>
+  </div>
+  <div className="login-container">
     <form className="form" onSubmit={loginForm.handleSubmit}>
        <p className="form-title">Sign in to your account</p>
         <div className="input-container">
@@ -79,6 +85,7 @@ opensnackbar={opensnackbar.open}
  message={opensnackbar.message}
  />
    </div>
+</body>
 )
 }
 export default Login;
