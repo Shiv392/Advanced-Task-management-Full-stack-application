@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BackdropComp from "../Common/Backdrop";
 import SnackbarComp from "../Common/Snackbar";
+import * as yup from 'yup';
 
 const Login=()=>{
     const {isAuthenticated,login,Logout}=useContext(authContext);
@@ -21,7 +22,11 @@ const Login=()=>{
             email:'',
             password:''
         },
-        onSubmit: async(values,{resetForm})=>{
+        validationSchema:yup.object({
+          email:yup.string().required().email('Enter Valid Email').max(50,'Email must be less then 50 length'),
+          password:yup.string().required()
+        }),
+        onSubmit: async(values)=>{
             console.log('login form values----->',values);
             await loginClick(values.email,values.password);
         }
@@ -58,15 +63,27 @@ return(
   <div className="login-container">
     <form className="form" onSubmit={loginForm.handleSubmit}>
        <p className="form-title">Sign in to your account</p>
-        <div className="input-container">
-          <input type="email" {...loginForm.getFieldProps('email')} placeholder="Enter email" />
+        <div className="input-container mb-2">
+          <input type="email" {...loginForm.getFieldProps('email')} placeholder="Enter email" /><br />
+          <div className="error-container">
+          {
+            loginForm.errors.email && loginForm.touched.email ? 
+            <p className="text text-danger error-text">{loginForm.errors.email}</p> : ''
+          }
+          </div>
           <span>
           </span>
       </div>
-      <div className="input-container">
+      <div className="input-container mt-2 mb-4">
           <input type="password" {...loginForm.getFieldProps('password')} placeholder="Enter password" />
+          <div className="error-container">
+          {
+            loginForm.errors.password && loginForm.touched.password ? 
+            <p className="text text-danger error-text">{loginForm.errors.password}</p> : ''
+          }
+          </div>
         </div>
-         <button type="submit" className="submit">
+         <button type="submit" disabled={!loginForm.isValid} className="submit">
         Sign in
       </button>
 
