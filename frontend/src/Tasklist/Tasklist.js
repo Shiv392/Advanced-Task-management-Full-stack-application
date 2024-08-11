@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import TaskTable from './TaskTable';
 import CompletedTask from './CompletedTask';
 import config from '../config.json';
@@ -9,6 +9,8 @@ import BackdropComp from '../Common/Backdrop.js';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import DividerComp from '../Common/Divider.js';
+import { authContext } from '../Auth/Auth.js';
+import { useNavigate } from 'react-router-dom';
 
 const TaskInput=()=>{
     const [newtask,setNewTask]=useState([]);
@@ -16,6 +18,9 @@ const TaskInput=()=>{
 
     const [openbackdrop,setBackdrop]=useState(false);
     const [opensnackbar,setSnackbar]=useState({open:false,message:''});
+
+    const {isAuthenticated,login,logout}=useContext(authContext);
+    const navigate=useNavigate();
 
     const inputform=useFormik({
         initialValues:{
@@ -30,7 +35,12 @@ const TaskInput=()=>{
     })
 
     useEffect(()=>{
-      GetTasklist();
+        if(isAuthenticated=='true' || isAuthenticated==true){
+            GetTasklist();
+        }
+        else{
+            navigate('/')
+        }
     },[])
 
     useEffect(()=>{

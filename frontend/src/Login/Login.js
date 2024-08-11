@@ -1,4 +1,4 @@
-import React, { useContext,useState } from "react";
+import React, { useCallback, useContext,useState } from "react";
 import './Login.css';
 import { useFormik } from "formik";
 import config from '../config.json';
@@ -27,7 +27,7 @@ const Login=()=>{
         }
     });
 
-    const loginClick=async(email,password)=>{
+    const loginClick= useCallback(async(email,password)=>{
           setBackdrop(true);
           const apibody={
             "email":email,"password":password
@@ -47,9 +47,9 @@ const Login=()=>{
             }, (5000));
            } 
            setBackdrop(false);       
-    }
+    },[loginForm,login,navigate])
 return(
-  <body className="body-container">
+  <div className="body-container">
   <div>
      <div className="wave"></div>
      <div className="wave"></div>
@@ -85,7 +85,7 @@ opensnackbar={opensnackbar.open}
  message={opensnackbar.message}
  />
    </div>
-</body>
+</div>
 )
 }
 export default Login;

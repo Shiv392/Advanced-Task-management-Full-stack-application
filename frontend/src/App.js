@@ -17,7 +17,7 @@ function App() {
       <Suspense fallback={<BackdropComp openbackdrop={true} />}>
       <Routes>
         <Route path='/' Component={Login} />
-        <Route path='/signup'element={<AuthRoute Component={SignUp}/>} />
+        <Route path='/signup' Component={SignUp}/>
         <Route path='/task' element={<AuthRoute Component={Task}/>}  />
       </Routes>
       </Suspense>

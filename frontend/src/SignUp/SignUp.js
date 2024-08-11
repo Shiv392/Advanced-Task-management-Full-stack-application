@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useCallback } from 'react';
 import {useFormik, validateYupSchema} from 'formik';
 import './SignUp.css';
 import * as yup from 'yup';
@@ -33,12 +33,12 @@ const SignUp=()=>{
             resetForm();
         }
     })
-    
+
     const [openbackdrop,setBackdrop]=useState(false);
     const [opensnackbar,setSnackbar]=useState({open:false,message:''});
     const navigate=useNavigate();
 
-    const signup=async ()=>{
+    const signup=useCallback(async ()=>{
         setBackdrop(true);
         const apibody={
             name:signupform.values.name,
@@ -49,6 +49,7 @@ const SignUp=()=>{
           console.log('res------>',res);
           if(res.data.success){
             setSnackbar({open:true,message:res.data.message});
+            signupform.resetForm();
             console.log('user signup success');
             setTimeout(() => {
               navigate('/')
@@ -64,7 +65,7 @@ const SignUp=()=>{
           }, 5000);        
           setBackdrop(false)
           }).catch(err=> console.error(err));
-    }
+    },[signupform,navigate])
 
 return(
 <div className='signup-container'>
