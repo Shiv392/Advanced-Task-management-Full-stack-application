@@ -170,7 +170,7 @@ const TaskInput=()=>{
                 <h5>Create New Task:</h5>
                 <div className='d-flex' style={{'justifyContent':"space-between","alignItems":"center"}}>
                 <div className='d-flex' style={{'gap':"20px",'width':"50%"}}>
-                <div>
+                <div style={{'width':"34%"}}>
                 <TextField id='title' label='Enter Title' variant="outlined"  {...inputform.getFieldProps('title')}  />
                 </div>
                 <div>

@@ -60,11 +60,21 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
         }
     }
 
+    const tablerow={
+        'text-align':"start"
+    }
+
+    const tableheader={
+        'text-align':'start'
+    }
+
     return(
         <div style={{'height':"300px",'overflow':"auto"}}>
             <h5>Task List:</h5>
+            {
+                tasklist.length==0 ? <div>No Task to Do</div> : 
             <table className='table table-stripped'>
-                <thead>
+                <thead style={tableheader}>
                     <tr>
                       <th>Done</th>
                       <th>Task Title</th>
@@ -75,8 +85,8 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
                 <tbody>
                     {
                         tasklist.map((task,index)=>(
-                            <tr key={index}>
-                                <td>
+                            <tr key={index} style={tablerow}>
+                                <td className='table-checkbox' style={{'marginTop':'-5px'}}>
                                   {
                                     <Checkbox checked={task.isCompleted==1} onClick={()=>checkboxclick(task)} />
                                   }  
@@ -92,7 +102,7 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
                     }
                 </tbody>
             </table>
-
+           }
             <EditDialog 
             open={open}
             editdialogres={EditdialogData}
@@ -111,6 +121,7 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
             message={'Have you done this task?'}
             dialogconfirm={statusconfirmres}
             />
+            
         </div>
     )
 }
