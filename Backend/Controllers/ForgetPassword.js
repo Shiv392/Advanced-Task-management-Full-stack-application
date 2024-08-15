@@ -1,4 +1,5 @@
 const mysql=require('../models/db.js');
+const Transporter=require('./NodeMailerTransporter.js');
 const bcrypt=require('bcrypt');
 const dotenv=require('dotenv');
 dotenv.config();
@@ -52,12 +53,28 @@ const CreateOTP = (req, res) => {
                         message: 'Could not save OTP'
                     });
                 }
-
-                return res.status(200).json({
-                    success: true,
-                    message: 'New OTP has been sent to your email address',
-                    otp: otp
-                });
+                const mailOptions = {
+                    from: process.env.GMAILUSER,
+                    to:email,
+                    subject: 'Forget Password OTP',
+                    text: otp
+                  };
+                  Transporter.sendMail(mailOptions,(mailerr,info)=>{
+                    if(mailerr){
+                        console.log('mail err----->',mailerr);
+                        return res.status(200).json({
+                            success:false,
+                            message:'Something went wrong'
+                        })
+                    }
+                    else{
+                        return res.status(200).json({
+                            success: true,
+                            message: 'New OTP has been sent to your email address',
+                            otp: otp
+                        });
+                    }
+                  })
             }
         );
     });
