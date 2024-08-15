@@ -1,4 +1,7 @@
 const mysql=require('../models/db.js');
+const bcrypt=require('bcrypt');
+const dotenv=require('dotenv');
+dotenv.config();
 
 const CreateOTP = (req, res) => {
     const { email } = req.body;
@@ -35,7 +38,7 @@ const CreateOTP = (req, res) => {
 
         // Generate a new OTP
         const otp = Math.floor(1000 + Math.random() * 9000).toString();
-        const otpExpirationTimeNew = new Date(currentTime + 5 * 60 * 1000); // OTP valid for 5 minutes
+        const otpExpirationTimeNew = new Date(currentTime + 10 * 60 * 1000); // OTP valid for 10 minutes
 
         // Update the OTP and expiration time in the database
         mysql.query(
@@ -61,6 +64,83 @@ const CreateOTP = (req, res) => {
 };
 
 const ForgetPassword=(req,res)=>{
-const {emial}=req.body;
+const {email,newpassword,otptoken}=req.body;
+mysql.query(`select * from user where email=?`,email,(err,user)=>{
+    if(err){
+        console.log('internal server error ------->',err);
+        return res.status(200).json({
+            success:false,
+            message:'something went wrong'
+        })
+    }
+    else{
+        if(user.length==0){
+            return res.status(200).json({
+                success:false,
+                message:'Email not found'
+            })
+        }
+        else{
+         let userobj=user[0];
+         if(userobj.otptoken!=otptoken){
+            return res.status(200).json({
+                success:false,
+                message:'Invalid OTP'
+            })
+         }
+         else{
+            const currentTime = new Date().getTime();
+            const otpExpirationTime=userobj.otpexpiretime;
+            if(currentTime>otpExpirationTime){
+                return res.status(200).json({
+                    success:false,
+                    message:'OTP has been expired'
+                })
+            }
+            else{
+               bcrypt.hash(newpassword,Number(process.env.HASH),(hasherr,hashpassword)=>{
+                if(hasherr){
+                    console.log('hasherror---->',hasherr)
+                    return res.status(200).json({
+                        success:false,
+                        message:hasherr
+                    })
+                }
+                else{
+                    mysql.query(`update user set password=? where email=?`,[hashpassword,email],(err2,changeres)=>{
+                        if(err2){
+                            console.log('this is errr2---->',err2);
+                            return res.status(200).json({
+                                success:false,
+                                message:'Error while updating password'
+                            })
+                        }
+                        else{
+                            //if password has been changed to make null to token and expritime.
+                            mysql.query(`update user set otptoken=?, otpexpiretime=? where email=?`,[null,null,email],(err3,finalres)=>{
+                             if(err3){
+                                console.log('err3-------->',err3)
+                                return res.status(200).json({
+                                    success:false,
+                                    message:err3
+                                })
+                             }
+                             else{
+                                return res.status(200).json({
+                                    success:true,
+                                    message:'Password has been successfully updated'
+                                })
+                             }
+                            })
+                            
+                        }
+                    })
+                }
+               })
+            }
+         }
+        }
+    }
+})
 }
 module.exports={ForgetPassword,CreateOTP};
