@@ -44,7 +44,7 @@ const Login = (req, res) => {
             } else {
                 return res.status(200).json({
                     success: false,
-                    message: 'Password is incorrect'
+                    message: 'Invalid password'
                 });
             }
         });

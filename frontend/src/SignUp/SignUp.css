@@ -5,6 +5,14 @@ img{
   mix-blend-mode:multiply;
 }
 
+.passwordicon-btn2{
+  position: absolute;
+    right: 31px;
+    /* height: 10px;
+    width: 50px; */
+    border: none;
+    color: gray;
+}
 .signup-container{
   display: flex;
   align-items: center;
@@ -80,7 +88,7 @@ img{
   }
   
   /*Button*/
-  .signup-form button {
+  .signup-form .signup-btn {
     background-color: #0066ff;
     color: #fff;
     border: 0;

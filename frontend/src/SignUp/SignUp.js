@@ -9,14 +9,10 @@ import BackdropComp from '../Common/Backdrop';
 import SnackbarComp from '../Common/Snackbar';
 import { useNavigate } from 'react-router-dom';
 import signupimage from './Signup.jpg';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import  IconButton  from "@mui/material/IconButton";
 
-const ValidationSchema=yup.object({
-    name:yup.string().required('Name is required'),
-    email:yup.string().required('Email is required').email('Invalid email'),
-    password:yup.string().required('Password is required')
-    .min(8),
-    confirmpasswordL:yup.string().required().oneOf([yup.ref('password'),null],'Password must match')
-})
 const SignUp=()=>{
 
     const signupform=useFormik({
@@ -26,7 +22,13 @@ const SignUp=()=>{
             password:'',
             confirmpassword:''
         },
-        validationSchema : ValidationSchema,
+        validateOnMount:true,
+        validationSchema :yup.object({
+          name:yup.string().required('Name is required').max(10),
+          email:yup.string().email('Enter valid email').required('Email is required').max(30),
+          password:yup.string().required('Enter password'),
+          confirmpassword : yup.string().required('Confirm your password')
+        }),
         onSubmit:(values,{resetForm})=>{
             console.log('form values---->',values);
             signup();
@@ -37,6 +39,11 @@ const SignUp=()=>{
     const [openbackdrop,setBackdrop]=useState(false);
     const [opensnackbar,setSnackbar]=useState({open:false,message:''});
     const navigate=useNavigate();
+    let [showPassword,setShowPassword]=useState(false);
+
+    const visible=()=>{
+      setShowPassword(!showPassword);
+    }
 
     const signup=useCallback(async ()=>{
         setBackdrop(true);
@@ -76,10 +83,15 @@ return(
     <div className="form-container">
       <input type="text" className="input" {...signupform.getFieldProps('name')} placeholder="Full Name" />
 	  <input type="email" className="input" {...signupform.getFieldProps('email')} placeholder="Email" />
-	  <input type="password" className="input" {...signupform.getFieldProps('password')} placeholder="Password" />
+	  <input type={!showPassword ? 'text':"password"} className="input" {...signupform.getFieldProps('password')} placeholder="Password" />
+    <IconButton onClick={()=> visible()} className="passwordicon-btn2">
+            {
+              showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />
+            }
+          </IconButton>
       <input type="password" className="input" {...signupform.getFieldProps('confirmpassword')} placeholder="Confirm Password" />
     </div>
-    <button type='submit' onClick={()=>signup()}>Sign up</button>
+    <button type='submit' className='signup-btn' disabled={!signupform.isValid} onClick={()=>signup()}>Sign up</button>
 </form>
 <div className="form-section">
   <p>Have an account? <Link to='/'>Login</Link> </p>

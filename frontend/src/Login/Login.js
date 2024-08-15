@@ -9,6 +9,9 @@ import axios from "axios";
 import BackdropComp from "../Common/Backdrop";
 import SnackbarComp from "../Common/Snackbar";
 import * as yup from 'yup';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import  IconButton  from "@mui/material/IconButton";
 
 const Login=()=>{
     const {isAuthenticated,login,Logout}=useContext(authContext);
@@ -16,6 +19,7 @@ const Login=()=>{
 
     const [openbackdrop,setBackdrop]=useState(false);
     const [opensnackbar,setSnackbar]=useState({open:false,message:''});
+    let [showPassword,setShowPassword]=useState(false);
 
     const loginForm=useFormik({
         initialValues:{
@@ -26,11 +30,16 @@ const Login=()=>{
           email:yup.string().required().email('Enter Valid Email').max(50,'Email must be less then 50 length'),
           password:yup.string().required()
         }),
+        validateOnMount:true,
         onSubmit: async(values)=>{
             console.log('login form values----->',values);
             await loginClick(values.email,values.password);
         }
     });
+
+    const visible=()=>{
+      setShowPassword(!showPassword);
+    }
 
     const loginClick= useCallback(async(email,password)=>{
           setBackdrop(true);
@@ -75,7 +84,12 @@ return(
           </span>
       </div>
       <div className="input-container mt-2 mb-4">
-          <input type="password" {...loginForm.getFieldProps('password')} placeholder="Enter password" />
+          <input type={!showPassword ? 'text':"password"} {...loginForm.getFieldProps('password')} placeholder="Enter password" />
+          <IconButton onClick={()=> visible()} type="button" className="passwordicon-btn">
+            {
+              showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />
+            }
+          </IconButton>
           <div className="error-container">
           {
             loginForm.errors.password && loginForm.touched.password ? 
