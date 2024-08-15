@@ -1,4 +1,4 @@
-import React, { useCallback, useContext,useState } from "react";
+import React, { useCallback, useContext,useEffect,useState } from "react";
 import './Login.css';
 import { useFormik } from "formik";
 import config from '../config.json';
@@ -20,6 +20,10 @@ const Login=()=>{
     const [openbackdrop,setBackdrop]=useState(false);
     const [opensnackbar,setSnackbar]=useState({open:false,message:''});
     let [showPassword,setShowPassword]=useState(false);
+
+    useEffect(()=>{
+    setShowPassword(false);
+    },[])
 
     const loginForm=useFormik({
         initialValues:{
@@ -52,6 +56,7 @@ const Login=()=>{
             localStorage.setItem('emial',email);
             localStorage.setItem('token',loginres.data.token);
             login();
+            setShowPassword(false);
             navigate('/task')
            }
            else{
@@ -84,10 +89,10 @@ return(
           </span>
       </div>
       <div className="input-container mt-2 mb-4">
-          <input type={!showPassword ? 'text':"password"} {...loginForm.getFieldProps('password')} placeholder="Enter password" />
+          <input type={showPassword ? 'text':"password"} {...loginForm.getFieldProps('password')} placeholder="Enter password" />
           <IconButton onClick={()=> visible()} type="button" className="passwordicon-btn">
             {
-              showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />
+              !showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />
             }
           </IconButton>
           <div className="error-container">

@@ -22,13 +22,13 @@ const SignUp=()=>{
             password:'',
             confirmpassword:''
         },
-        validateOnMount:true,
         validationSchema :yup.object({
           name:yup.string().required('Name is required').max(10),
           email:yup.string().email('Enter valid email').required('Email is required').max(30),
           password:yup.string().required('Enter password'),
-          confirmpassword : yup.string().required('Confirm your password')
+          confirmpassword : yup.string().oneOf([yup.ref('password'),null],'Password must match').required('Confirm your password')
         }),
+        validateOnMount:true,
         onSubmit:(values,{resetForm})=>{
             console.log('form values---->',values);
             signup();
@@ -44,6 +44,10 @@ const SignUp=()=>{
     const visible=()=>{
       setShowPassword(!showPassword);
     }
+
+    useEffect(()=>{
+      setShowPassword(false);
+      },[])
 
     const signup=useCallback(async ()=>{
         setBackdrop(true);
@@ -83,10 +87,10 @@ return(
     <div className="form-container">
       <input type="text" className="input" {...signupform.getFieldProps('name')} placeholder="Full Name" />
 	  <input type="email" className="input" {...signupform.getFieldProps('email')} placeholder="Email" />
-	  <input type={!showPassword ? 'text':"password"} className="input" {...signupform.getFieldProps('password')} placeholder="Password" />
+	  <input type={showPassword ? 'text':"password"} className="input" {...signupform.getFieldProps('password')} placeholder="Password" />
     <IconButton onClick={()=> visible()} className="passwordicon-btn2">
             {
-              showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />
+              !showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />
             }
           </IconButton>
       <input type="password" className="input" {...signupform.getFieldProps('confirmpassword')} placeholder="Confirm Password" />
