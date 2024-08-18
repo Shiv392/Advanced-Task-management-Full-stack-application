@@ -18,7 +18,7 @@ const CreateOTP = (req, res) => {
         } 
 
         if (users.length === 0) {
-            return res.status(404).json({
+            return res.status(200).json({
                 success: false,
                 message: 'Email not found'
             });
