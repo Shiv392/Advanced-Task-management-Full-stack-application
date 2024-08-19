@@ -32,7 +32,7 @@ const CreateOTP = (req, res) => {
         if (currentTime < otpExpirationTime) {
             return res.status(200).json({
                 success: true,
-                message: 'OTP already exists and is still valid',
+                message: 'OTP has been sent to your email address',
                 otp: user.otptoken
             });
         }
@@ -70,7 +70,7 @@ const CreateOTP = (req, res) => {
                     else{
                         return res.status(200).json({
                             success: true,
-                            message: 'New OTP has been sent to your email address',
+                            message: 'OTP has been sent to your email address',
                             otp: otp
                         });
                     }

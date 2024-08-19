@@ -14,6 +14,7 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
     const [editData,setEditData]=useState(Object);
     const [deleteData,setDeleteData]=useState(Object);
     const [openconfirm,setOpenConfirm]=useState(false);
+    const [openDeleteConfirm,setDeleteConfirm]=useState(false);
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -24,14 +25,14 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
        setOpendialog(true);
     }
 
-    const openConfirmDialog=(task)=>{
+    const openDeleteDialog=(task)=>{
          setDeleteData(task);
-         setOpenConfirm(true);
+         setDeleteConfirm(true);
     }
 
     const confirmdialogres=(confirm)=>{
         console.log('deleteData---->',deleteData)
-        setOpenConfirm(false);
+        setDeleteConfirm(false);
         if(confirm){
             datafromTable({isedit:false,isdelete:true,isstatuschanged:false,task:deleteData })
         }
@@ -95,7 +96,7 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
                                 <td>{task.description}</td>
                                 <td>
                                  <IconButton color='warning'  aria-hidden="false" aria-modal="true"  onClick={()=>openEditdialog(task)}>{<EditIcon />}</IconButton>
-                                 <IconButton color='error' aria-hidden="false" aria-modal="true" onClick={()=>openConfirmDialog(task)}>{<DeleteIcon/>}</IconButton>
+                                 <IconButton color='error' aria-hidden="false" aria-modal="true" onClick={()=>openDeleteDialog(task)}>{<DeleteIcon/>}</IconButton>
                                 </td>
                             </tr>
                         ))
@@ -111,7 +112,7 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
             />
 
             <ConfirmDialog 
-            open={openconfirm}
+            open={openDeleteConfirm}
             message={'Are you sure you want to delete this task?'}
             dialogconfirm={confirmdialogres}
             />
