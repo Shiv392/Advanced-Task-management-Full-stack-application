@@ -14,6 +14,7 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
     const [editData,setEditData]=useState(Object);
     const [deleteData,setDeleteData]=useState(Object);
     const [openconfirm,setOpenConfirm]=useState(false);
+    const [openDeleteConfirm,setDeleteConfirm]=useState(false);
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -24,14 +25,14 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
        setOpendialog(true);
     }
 
-    const openConfirmDialog=(task)=>{
+    const openDeleteDialog=(task)=>{
          setDeleteData(task);
-         setOpenConfirm(true);
+         setDeleteConfirm(true);
     }
 
     const confirmdialogres=(confirm)=>{
         console.log('deleteData---->',deleteData)
-        setOpenConfirm(false);
+        setDeleteConfirm(false);
         if(confirm){
             datafromTable({isedit:false,isdelete:true,isstatuschanged:false,task:deleteData })
         }
@@ -60,11 +61,21 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
         }
     }
 
+    const tablerow={
+        'text-align':"start"
+    }
+
+    const tableheader={
+        'text-align':'start'
+    }
+
     return(
         <div style={{'height':"300px",'overflow':"auto"}}>
             <h5>Task List:</h5>
+            {
+                tasklist.length==0 ? <div>No Task to Do</div> : 
             <table className='table table-stripped'>
-                <thead>
+                <thead style={tableheader}>
                     <tr>
                       <th>Done</th>
                       <th>Task Title</th>
@@ -75,8 +86,8 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
                 <tbody>
                     {
                         tasklist.map((task,index)=>(
-                            <tr key={index}>
-                                <td>
+                            <tr key={index} style={tablerow}>
+                                <td className='table-checkbox' style={{'marginTop':'-5px'}}>
                                   {
                                     <Checkbox checked={task.isCompleted==1} onClick={()=>checkboxclick(task)} />
                                   }  
@@ -85,14 +96,14 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
                                 <td>{task.description}</td>
                                 <td>
                                  <IconButton color='warning'  aria-hidden="false" aria-modal="true"  onClick={()=>openEditdialog(task)}>{<EditIcon />}</IconButton>
-                                 <IconButton color='error' aria-hidden="false" aria-modal="true" onClick={()=>openConfirmDialog(task)}>{<DeleteIcon/>}</IconButton>
+                                 <IconButton color='error' aria-hidden="false" aria-modal="true" onClick={()=>openDeleteDialog(task)}>{<DeleteIcon/>}</IconButton>
                                 </td>
                             </tr>
                         ))
                     }
                 </tbody>
             </table>
-
+           }
             <EditDialog 
             open={open}
             editdialogres={EditdialogData}
@@ -101,7 +112,7 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
             />
 
             <ConfirmDialog 
-            open={openconfirm}
+            open={openDeleteConfirm}
             message={'Are you sure you want to delete this task?'}
             dialogconfirm={confirmdialogres}
             />
@@ -111,6 +122,7 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
             message={'Have you done this task?'}
             dialogconfirm={statusconfirmres}
             />
+            
         </div>
     )
 }

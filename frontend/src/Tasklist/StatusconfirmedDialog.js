@@ -15,7 +15,7 @@ const ConfirmStatus=({open,message,dialogconfirm})=>{
             </div>
             <DialogActions>
                 <button className='btn btn-secondary' onClick={()=>dialogconfirm(false)}>Cancel</button>
-                <button className='btn btn-danger' onClick={()=>dialogconfirm(true)}>Delete</button>
+                <button className='btn btn-danger' onClick={()=>dialogconfirm(true)}>Confirm</button>
             </DialogActions>
         </Dialog>
     )

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import TaskTable from './TaskTable';
 import CompletedTask from './CompletedTask';
 import config from '../config.json';
@@ -9,19 +9,30 @@ import BackdropComp from '../Common/Backdrop.js';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import DividerComp from '../Common/Divider.js';
+import { authContext } from '../Auth/Auth.js';
+import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
 
 const TaskInput=()=>{
     const [newtask,setNewTask]=useState([]);
     const [completetask,setCompleteTask]=useState([]);
 
-    const [openbackdrop,setBackdrop]=useState(false);
+    const [openbackdrop,setBackdrop]=useState(true);
     const [opensnackbar,setSnackbar]=useState({open:false,message:''});
+
+    const {isAuthenticated,login,logout}=useContext(authContext);
+    const navigate=useNavigate();
 
     const inputform=useFormik({
         initialValues:{
             title:'',
             description:''
         },
+        validateOnMount:true,
+        validationSchema:yup.object({
+            title:yup.string().required('Title is required').max(10),
+            description:yup.string().required('Description is required').max(50)
+        }),
         onSubmit:(values,{resetForm})=>{
             console.log('form values----->',values);
             AddTask({title:values.title,description:values.description})
@@ -30,16 +41,13 @@ const TaskInput=()=>{
     })
 
     useEffect(()=>{
-      GetTasklist();
+        if(isAuthenticated=='true' || isAuthenticated==true){
+            GetTasklist();
+        }
+        else{
+            navigate('/')
+        }
     },[])
-
-    useEffect(()=>{
-        console.log('this is current task---->',newtask)
-    },[newtask]);
-
-    useEffect(()=>{
-        console.log('this is completd task------->',completetask)
-    },[completetask]);
 
     const GetTasklist=async()=>{
         // setBackdrop(true);
@@ -54,7 +62,7 @@ const TaskInput=()=>{
         setCompleteTask(res.data.tasklist.filter(ele=> ele.isCompleted==1));
         console.log('new task list------>',newtask);
         console.log('non-complete task list------->',completetask);
-        // setBackdrop(false);
+        setBackdrop(false);
     }
 
     const AddTask=async({title,description})=>{
@@ -154,13 +162,13 @@ const TaskInput=()=>{
     UpdateTaskStatus(task.taskid,false)
     }
     return (
-        <div className='container mt-4'>
-            <div className='mt-5'>
-                <form className='form' onSubmit={inputform.handleSubmit}>
+        <div className='container mt-2'>
+            <div className='mt-3'>
+                <form className='taskform' onSubmit={inputform.handleSubmit}>
                 <h5>Create New Task:</h5>
                 <div className='d-flex' style={{'justifyContent':"space-between","alignItems":"center"}}>
                 <div className='d-flex' style={{'gap':"20px",'width':"50%"}}>
-                <div>
+                <div style={{'width':"34%"}}>
                 <TextField id='title' label='Enter Title' variant="outlined"  {...inputform.getFieldProps('title')}  />
                 </div>
                 <div>
@@ -171,7 +179,7 @@ const TaskInput=()=>{
                 </div>
                 </div>
                 <div>
-                    <Button color='primary' variant='contained' type='submit'>
+                    <Button color='primary' disabled={!inputform.isValid} variant='contained' type='submit'>
                         Add Task
                     </Button>
                 </div>

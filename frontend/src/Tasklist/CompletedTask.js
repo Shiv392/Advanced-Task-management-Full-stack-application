@@ -27,6 +27,8 @@ const CompletedTask=({completetasklist,completelistres})=>{
     return(
         <div style={{'height':"300px",'overflow':"auto"}}>
             <h5>Completed Task List:</h5>
+            {
+                completetasklist.length==0 ? <div>No Task Completed </div> :
             <table className='table table-responsive'>
                 <thead>
                     <tr>
@@ -51,6 +53,8 @@ const CompletedTask=({completetasklist,completelistres})=>{
                     }
                 </tbody>
             </table>
+
+            }
 
             <ConfirmStatus 
             open={openconfirm}

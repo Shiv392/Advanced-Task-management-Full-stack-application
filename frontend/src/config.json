@@ -5,5 +5,7 @@
     "addtask":"http://localhost:8000/task/addtask",
     "deletetask":"http://localhost:8000/task/deletetask",
     "edittask":"http://localhost:8000/task/edittask",
-    "updatetaskstatus":"http://localhost:8000/task/updatetaskstatus"
+    "updatetaskstatus":"http://localhost:8000/task/updatetaskstatus",
+    "sendotp":"http://localhost:8000/user/createotp",
+    "forgetpassword":"http://localhost:8000/user/forgetpassword"
 }

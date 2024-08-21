@@ -1,18 +1,22 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext,useEffect } from 'react';
 import { authContext } from './Auth';
 
 const AuthRoute=({Component})=>{
-const navigate=useNavigate();
+const navigate= useNavigate();
 const {isAuthenticated}=useContext(authContext);
 console.log('isAuthenticated----->',isAuthenticated)
 
 useEffect(()=>{
-    if(!isAuthenticated){
-        navigate('/')
+    console.log('check---->',typeof isAuthenticated);
+    console.log('navigate------>',navigate.name)
+    if(isAuthenticated==='false'){
+        console.log('unauthenticated-------->')
+        navigate("/")
     }
-},[isAuthenticated,navigate])
+},[isAuthenticated]);
+
 return(
     isAuthenticated ? <Component /> : null
 )
