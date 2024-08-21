@@ -31,20 +31,21 @@ const EmailDialog=({openemaildialog,emaildialogresponse})=>{
 return(
 <Dialog open={openemaildialog} sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
       maxWidth="xs">
+<div>
 <DialogTitle>Enter your Email:</DialogTitle>
 <DialogContent>
-    <form className="form2" onSubmit={emailform.handleSubmit}>
+    <form className=".email-dialogform" onSubmit={emailform.handleSubmit}>
     <div className="input-container2 mb-2">
           <input type="email" className='input1' {...emailform.getFieldProps('email')} placeholder="abc123@gmail.com" />
         </div>
     </form>
 </DialogContent>
 <DialogActions>
-<div>
     <button className='btn btn-light' onClick={()=>emaildialogresponse(null)}>Cancel</button>
     <button className='btn btn-primary' type='submit' onClick={()=> save()} disabled={!emailform.isValid}>Send OTP</button>
-</div>
+
 </DialogActions>
+</div>
 </Dialog>
 )
 }
