@@ -33,10 +33,9 @@ const TaskInput=()=>{
             title:yup.string().required('Title is required').max(10),
             description:yup.string().required('Description is required').max(50)
         }),
-        onSubmit:(values,{resetForm})=>{
+        onSubmit:(values)=>{
             console.log('form values----->',values);
-            AddTask({title:values.title,description:values.description})
-            resetForm();
+            AddTask()
         }
     })
 
@@ -65,15 +64,19 @@ const TaskInput=()=>{
         setBackdrop(false);
     }
 
-    const AddTask=async({title,description})=>{
+    const AddTask=async()=>{
         setBackdrop(true);
+        
      const apibody={
         "email":localStorage.getItem('emial'),
         "token":localStorage.getItem('token'),
-        "title":title,
-        "description":description
+        "title":inputform.values.title,
+        "description":inputform.values.description
      }
      const addres=await axios.post(config.addtask,apibody,{headers:{'Authorization':localStorage.getItem('token')}});
+     if(addres.data.success){
+        inputform.resetForm();
+     }
     setBackdrop(false);
     setSnackbar({open:true,message:addres.data.message});
     setTimeout(() => {
@@ -165,21 +168,21 @@ const TaskInput=()=>{
         <div className='container mt-2'>
             <div className='mt-3'>
                 <form className='taskform' onSubmit={inputform.handleSubmit}>
-                <h5>Create New Task:</h5>
+                <h5>Create Task:</h5>
                 <div className='d-flex' style={{'justifyContent':"space-between","alignItems":"center"}}>
                 <div className='d-flex' style={{'gap':"20px",'width':"50%"}}>
                 <div style={{'width':"34%"}}>
-                <TextField id='title' label='Enter Title' variant="outlined"  {...inputform.getFieldProps('title')}  />
+                <TextField id='title'  label='Enter Title' inputProps={{ maxLength: 10 }} variant="outlined"  {...inputform.getFieldProps('title')}  />
                 </div>
                 <div>
-                    <TextField id='description' label='Enter Description' variant='outlined'
+                    <TextField id='description' inputProps={{ maxLength: 50 }} label='Enter Description' variant='outlined'
                     {
                         ...inputform.getFieldProps('description')
                     } />
                 </div>
                 </div>
                 <div>
-                    <Button color='primary' disabled={!inputform.isValid} variant='contained' type='submit'>
+                    <Button color='primary' variant='contained' type='submit'>
                         Add Task
                     </Button>
                 </div>

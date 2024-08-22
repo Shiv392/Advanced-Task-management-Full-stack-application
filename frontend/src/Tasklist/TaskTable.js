@@ -8,6 +8,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import Checkbox from '@mui/material/Checkbox';
 import ConfirmStatus from './StatusconfirmedDialog';
+import './TaskTable.css';
 
 const TaskTable=({tasklist,datafromTable,statusChanged})=>{
     const [open,setOpendialog]=useState(false);
@@ -62,24 +63,22 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
     }
 
     const tablerow={
-        'text-align':"start"
-    }
-
-    const tableheader={
-        'text-align':'start'
+        'textAlign':"start"
     }
 
     return(
-        <div style={{'height':"300px",'overflow':"auto"}}>
+        <div>
             <h5>Task List:</h5>
+            <div style={{'height':"300px",'overflow':"auto"}}>
+
             {
                 tasklist.length==0 ? <div>No Task to Do</div> : 
-            <table className='table table-stripped'>
-                <thead style={tableheader}>
+            <table className='task-table table  table-responsive table-borderless'>
+                <thead style={{textAlign:'start'}}>
                     <tr>
                       <th>Done</th>
-                      <th>Task Title</th>
-                      <th>Task Description</th>
+                      <th className='task-title'>Task Title</th>
+                      <th className="task-description">Task Description</th>
                       <th>Actions</th>
                     </tr>
                 </thead>
@@ -92,9 +91,9 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
                                     <Checkbox checked={task.isCompleted==1} onClick={()=>checkboxclick(task)} />
                                   }  
                                 </td>
-                                <td>{task.title}</td>
-                                <td>{task.description}</td>
-                                <td>
+                                <td className="task-title">{task.title}</td>
+                                <td className="task-description">{task.description}</td>
+                                <td className='task-actions'>
                                  <IconButton color='warning'  aria-hidden="false" aria-modal="true"  onClick={()=>openEditdialog(task)}>{<EditIcon />}</IconButton>
                                  <IconButton color='error' aria-hidden="false" aria-modal="true" onClick={()=>openDeleteDialog(task)}>{<DeleteIcon/>}</IconButton>
                                 </td>
@@ -123,6 +122,7 @@ const TaskTable=({tasklist,datafromTable,statusChanged})=>{
             dialogconfirm={statusconfirmres}
             />
             
+        </div>
         </div>
     )
 }

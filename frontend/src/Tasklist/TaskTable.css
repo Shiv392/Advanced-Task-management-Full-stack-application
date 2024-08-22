@@ -1,0 +1,61 @@
+/* Container for the table */
+.task-table-container {
+    height: 300px;
+    overflow: auto;
+}
+
+/* Styles for the table */
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Styles for table headers */
+.task-table th {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: start;
+}
+
+/* Styles for table cells */
+.task-table td {
+    text-align: start;
+    word-break: break-word; /* Ensure text wraps properly */
+    overflow: hidden; /* Hide any overflow */
+    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+}
+
+/* Specific styles for the title and description columns */
+.task-title {
+    width: 20%; /* Adjust as needed */
+    max-width: 150px; /* Optional: max width for the title column */
+}
+
+.task-description {
+    width: 60%; /* Adjust as needed */
+    max-width: 400px; /* Optional: max width for the description column */
+}
+
+/* Styles for the checkbox cell */
+.table-checkbox {
+    margin-top: -5px;
+}
+
+
+.task-actions{
+    display: flex;
+}
+
+::-webkit-scrollbar{
+    width: 5px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: rgb(247, 245, 245);
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: rgb(171, 168, 168);
+    border-radius: 10px;
+    scroll-behavior: smooth;
+}

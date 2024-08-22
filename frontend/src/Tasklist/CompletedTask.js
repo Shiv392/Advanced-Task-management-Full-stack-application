@@ -1,67 +1,74 @@
 import React, { useState } from 'react';
 import Checkbox from '@mui/material/Checkbox';
-import { format } from 'date-fns';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ConfirmStatus from './StatusconfirmedDialog';
+import { format } from 'date-fns';
 
-const CompletedTask=({completetasklist,completelistres})=>{
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return format(date, 'dd MMMM yyyy h:mma');
-      };
+const CompletedTask = ({ completetasklist, completelistres }) => {
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return format(date, 'dd MMMM yyyy h:mma');
+  };
 
-      const [openconfirm,setConfirm]=useState(false);
-      const [data,setData]=useState(Object);
+  const [openconfirm, setConfirm] = useState(false);
+  const [data, setData] = useState(Object);
 
-      const openStatusConfirm=(task)=>{
-          setData(task);
-          setConfirm(true);
-      }
+  const openStatusConfirm = (task) => {
+    setData(task);
+    setConfirm(true);
+  };
 
-      const StatusConfirmed=(confirm)=>{
-        setConfirm(false)
-         if(confirm){
-            completelistres(data);
-         }
-      }
+  const StatusConfirmed = (confirm) => {
+    setConfirm(false);
+    if (confirm) {
+      completelistres(data);
+    }
+  };
 
-    return(
-        <div style={{'height':"300px",'overflow':"auto"}}>
-            <h5>Completed Task List:</h5>
-            {
-                completetasklist.length==0 ? <div>No Task Completed </div> :
-            <table className='table table-responsive'>
-                <thead>
-                    <tr>
-                        <th>Done</th>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Created At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                     completetasklist.map((task,index)=>(
-                        <tr key={index}>
-                        <td>
-                            {<Checkbox checked={task.isCompleted==1} onClick={()=> openStatusConfirm(task)} />}
-                        </td>
-                        <td>{task.title}</td>
-                        <td>{task.description}</td>
-                        <td>{formatDate(task.created_at)}</td>
-                        </tr>
-                     ))
-                    }
-                </tbody>
-            </table>
+  return (
+    <div>
+        <h5>Completed Task List:</h5>
+        <div style={{ height: "300px", overflow: "auto" }}>
+      {completetasklist.length === 0 ? (
+        <div>No Task Completed</div>
+      ) : (
+        completetasklist.map((task, index) => (
+          <Accordion key={index}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <div>
+                <Checkbox
+                  checked={task.isCompleted === 1}
+                  onClick={(event) => {
+                    event.stopPropagation(); 
+                    openStatusConfirm(task);
+                  }}
+                />
+                {task.title}
+              </div>
+            </AccordionSummary>
+            <AccordionDetails style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              <div>
+                <strong>Description:</strong> <span>{task.description}</span>
+              </div>
+              <div>
+                <strong>Task Created:</strong> <span>{formatDate(task.created_at)}</span>
+              </div>
+            </AccordionDetails>
+          </Accordion>
+        ))
+      )}
 
-            }
+      <ConfirmStatus
+        open={openconfirm}
+        message={'Are you sure you want to continue with this task?'}
+        dialogconfirm={StatusConfirmed}
+      />
+    </div>
+    </div>
+  );
+};
 
-            <ConfirmStatus 
-            open={openconfirm}
-            message={'Are you sure you want to continue with this task?'}
-            dialogconfirm={StatusConfirmed}
-            />
-        </div>
-    )
-}
 export default CompletedTask;

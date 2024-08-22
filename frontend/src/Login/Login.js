@@ -1,5 +1,7 @@
 import React, { useCallback, useContext,useEffect,useState } from "react";
 import './Login.css';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import { useFormik } from "formik";
 import config from '../config.json';
 import { Link } from "react-router-dom";
@@ -29,6 +31,7 @@ const Login=()=>{
 
     useEffect(()=>{
     setShowPassword(false);
+    AOS.init();
     },[])
 
     const loginForm=useFormik({
@@ -137,7 +140,7 @@ return(
      <div className="wave"></div>
      <div className="wave"></div>
   </div>
-  <div className="login-container">
+  <div data-aos="fade-right" className="login-container">
     <form className="form" onSubmit={loginForm.handleSubmit}>
        <p className="form-title">Sign in to your account</p>
         <div className="input-container mb-2">

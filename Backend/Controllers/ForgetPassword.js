@@ -33,7 +33,7 @@ const CreateOTP = (req, res) => {
             return res.status(200).json({
                 success: true,
                 message: 'OTP has been sent to your email address',
-                otp: user.otptoken
+                // otp: user.otptoken
             });
         }
 
